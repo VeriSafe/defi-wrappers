@@ -44,7 +44,6 @@ const closeAsync = async (web3Wrapper: Web3Wrapper, contract: SimpleMarginTradin
     // 2. fetch 0x API quote to buy DAI for repayment
     // TODO: fetch quote from 0x API 
 
-
     // TODO: convert quote to the contract quote format ;
 
     // 3. execute a smart contract call to open a margin position
