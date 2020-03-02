@@ -12,13 +12,13 @@ contract SimpleTokenSwap
 {
     using LibBytes for bytes;
 
-    address internal OWNER;
-    IForwarder internal FORWARDER;
+    address internal owner;
+    IForwarder internal forwarder;
 
     constructor (address _forwarder)
         public
     {
-        FORWARDER = IForwarder(_forwarder);
+        forwarder = IForwarder(_forwarder);
         OWNER = msg.sender;
     }
 

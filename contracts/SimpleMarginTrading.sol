@@ -8,12 +8,12 @@ import "@0x/contracts-utils/contracts/src/LibSafeMath.sol";
 
 // interfaces
 import "@0x/contracts-erc20/contracts/src/interfaces/IERC20Token.sol";
-import "@0x/contracts-exchange/contracts/src/interfaces/IExchange.sol";
+import "@0x/contracts-exchange/contracts/src/interfaces/Iexchange.sol";
 import "@0x/contracts-asset-proxy/contracts/src/interfaces/IAssetData.sol";
 import "@0x/contracts-erc20/contracts/src/interfaces/IEtherToken.sol";
 import "./interfaces/ICERC20.sol";
-import "./interfaces/ICETH.sol";
-import "./interfaces/IComptroller.sol";
+import "./interfaces/Iceth.sol";
+import "./interfaces/Icomptroller.sol";
 
 contract SimpleMarginTrading
 {
@@ -23,13 +23,13 @@ contract SimpleMarginTrading
     uint256 constant internal MAX_UINT = uint256(-1);
 
     // contract references
-    address payable internal OWNER;
-    IExchange internal EXCHANGE;
-    IComptroller internal COMPTROLLER;
-    ICERC20 internal CDAI;
-    ICETH internal CETH;
-    IEtherToken internal WETH; // possible to get underlying address of C token from contract?
-    IERC20Token internal DAI;
+    address payable internal owner;
+    Iexchange internal exchange;
+    Icomptroller internal comptroller;
+    ICERC20 internal cdai;
+    Iceth internal ceth;
+    IEtherToken internal weth;
+    IERC20Token internal dai;
 
     // margin position related variables
     uint256 internal positionBalance = 0; // total position size (ETH locked in CETH + WETH + contract balance)
@@ -54,14 +54,14 @@ contract SimpleMarginTrading
         )
         public
     {
-        EXCHANGE = IExchange(_exchange);
-        COMPTROLLER = IComptroller(_comptroller);
-        CDAI = ICERC20(_cdai);
-        CETH = ICETH(_ceth);
-        WETH = IEtherToken(_weth);
-        DAI = IERC20Token(_dai);
+        exchange = Iexchange(_exchange);
+        comptroller = Icomptroller(_comptroller);
+        cdai = ICERC20(_cdai);
+        ceth = Iceth(_ceth);
+        weth = IEtherToken(_weth);
+        dai = IERC20Token(_dai);
 
-        OWNER = msg.sender;
+        owner = msg.sender;
 
         // Enter markets
         _enterMarkets();
@@ -72,8 +72,8 @@ contract SimpleMarginTrading
     }
 
     // modifiers
-    modifier onlyOwner() {
-        require(msg.sender == OWNER, "permission denied");
+    modifier onlyowner() {
+        require(msg.sender == owner, "permission denied");
         _;
     }
 
@@ -91,11 +91,11 @@ contract SimpleMarginTrading
         internal
     {
         address[] memory markets = new address[](2);
-        markets[0] = address(CETH);
-        markets[1] = address(CDAI);
-        uint[] memory errors = COMPTROLLER.enterMarkets(markets);
-        require(errors[0] == 0, "CETH cant enter market");
-        require(errors[1] == 0, "CDAI cant enter market");
+        markets[0] = address(ceth);
+        markets[1] = address(cdai);
+        uint[] memory errors = comptroller.enterMarkets(markets);
+        require(errors[0] == 0, "ceth cant enter market");
+        require(errors[1] == 0, "cdai cant enter market");
     }
 
     function _getZeroExApprovalAddress()
@@ -104,7 +104,7 @@ contract SimpleMarginTrading
         returns (address)
     {
         bytes4 erc20ProxyId = IAssetData(address(0)).ERC20Token.selector;
-        return EXCHANGE.getAssetProxy(erc20ProxyId);
+        return exchange.getAssetProxy(erc20ProxyId);
     }
 
     function _approve(address token, address delegated)
@@ -117,5 +117,5 @@ contract SimpleMarginTrading
 
     // TODO: Add a function that closes the leverage position
 
-    // TODO: Add a function that returns the current DAI borrow balance
+    // TODO: Add a function that returns the current dai borrow balance
 }
