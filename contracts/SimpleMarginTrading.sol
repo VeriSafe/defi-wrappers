@@ -8,12 +8,12 @@ import "@0x/contracts-utils/contracts/src/LibSafeMath.sol";
 
 // interfaces
 import "@0x/contracts-erc20/contracts/src/interfaces/IERC20Token.sol";
-import "@0x/contracts-exchange/contracts/src/interfaces/Iexchange.sol";
+import "@0x/contracts-exchange/contracts/src/interfaces/IExchange.sol";
 import "@0x/contracts-asset-proxy/contracts/src/interfaces/IAssetData.sol";
 import "@0x/contracts-erc20/contracts/src/interfaces/IEtherToken.sol";
 import "./interfaces/ICERC20.sol";
-import "./interfaces/Iceth.sol";
-import "./interfaces/Icomptroller.sol";
+import "./interfaces/ICEther.sol";
+import "./interfaces/IComptroller.sol";
 
 contract SimpleMarginTrading
 {
@@ -24,10 +24,10 @@ contract SimpleMarginTrading
 
     // contract references
     address payable internal owner;
-    Iexchange internal exchange;
-    Icomptroller internal comptroller;
+    IExchange internal exchange;
+    IComptroller internal comptroller;
     ICERC20 internal cdai;
-    Iceth internal ceth;
+    ICEther internal ceth;
     IEtherToken internal weth;
     IERC20Token internal dai;
 
@@ -54,10 +54,10 @@ contract SimpleMarginTrading
         )
         public
     {
-        exchange = Iexchange(_exchange);
-        comptroller = Icomptroller(_comptroller);
+        exchange = IExchange(_exchange);
+        comptroller = IComptroller(_comptroller);
         cdai = ICERC20(_cdai);
-        ceth = Iceth(_ceth);
+        ceth = ICEther(_ceth);
         weth = IEtherToken(_weth);
         dai = IERC20Token(_dai);
 
@@ -72,7 +72,7 @@ contract SimpleMarginTrading
     }
 
     // modifiers
-    modifier onlyowner() {
+    modifier onlyOwner() {
         require(msg.sender == owner, "permission denied");
         _;
     }

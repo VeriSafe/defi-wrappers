@@ -19,7 +19,7 @@ contract SimpleTokenSwap
         public
     {
         forwarder = IForwarder(_forwarder);
-        OWNER = msg.sender;
+        owner = msg.sender;
     }
 
     // TODO: Add a function that executes the transaction provided by the API
