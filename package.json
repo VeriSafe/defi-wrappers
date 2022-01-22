@@ -32,7 +32,7 @@
         "@0x/web3-wrapper": "^7.0.3",
         "cross-env": "^7.0.2",
         "dotenv": "^8.2.0",
-        "node-fetch": "^2.6.0",
+        "node-fetch": "^3.1.1",
         "qs": "^6.9.1"
     },
     "devDependencies": {
