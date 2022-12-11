@@ -33,7 +33,7 @@
         "cross-env": "^7.0.2",
         "dotenv": "^8.2.0",
         "node-fetch": "^2.6.0",
-        "qs": "^6.9.1"
+        "qs": "^6.9.7"
     },
     "devDependencies": {
         "@0x/abi-gen": "^5.0.3",
